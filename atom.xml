@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>书巢</title>
+  
+  <subtitle>故知一死生为虚诞，齐彭殇为妄作。</subtitle>
+  <link href="http://rmchz.github.io/atom.xml" rel="self"/>
+  
+  <link href="http://rmchz.github.io/"/>
+  <updated>2021-06-17T07:40:09.358Z</updated>
+  <id>http://rmchz.github.io/</id>
+  
+  <author>
+    <name>书巢主人</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>关于TCP粘包</title>
+    <link href="http://rmchz.github.io/2021/06/17/%E5%85%B3%E4%BA%8ETCP%E7%B2%98%E5%8C%85/"/>
+    <id>http://rmchz.github.io/2021/06/17/%E5%85%B3%E4%BA%8ETCP%E7%B2%98%E5%8C%85/</id>
+    <published>2021-06-17T07:20:12.000Z</published>
+    <updated>2021-06-17T07:40:09.358Z</updated>
+    
+    <content type="html"><![CDATA[<p>首先要确定一个问题，什么是<strong>粘包</strong>？下面是某博客关于<strong>粘包</strong>的描述：</p><h4 id="“TCP粘包就是指发送方发送的若干包数据到达接收方时粘成了一包。”-1"><a href="#“TCP粘包就是指发送方发送的若干包数据到达接收方时粘成了一包。”-1" class="headerlink" title="“TCP粘包就是指发送方发送的若干包数据到达接收方时粘成了一包。”[1]"></a>“TCP粘包就是指发送方发送的若干包数据到达接收方时粘成了一包。”[1]</h4><p>也就是说，存在一个TCP数据包，每一次TCP请求就会发送一个数据包。当这些TCP包内容太少（即包太小）的时候，TCP的实现就会将许多数据包拼到一起，在接收方看来就是一个包。</p><p>实际这是<strong>错误</strong>的。<br>首先需要明确的一点是：TCP是一个<strong>流式传输协议</strong>。即在使用TCP执行了<strong>发送消息</strong>这一动作之后，消息首先被应用程序拷贝到了操作系统内核协议栈，再通过发送窗口，拥塞窗口，以及发送缓冲区大小等条件进行发送。<br>也就是说我们不能假定一次SEND调用发送的数据或作为一个整体发送出去。</p><p>所以所谓的<strong>粘包</strong>问题应该被描述为：由于TCP是一个基于字节流的流式传输协议，所以不同的数据在一起进行传输的时候并没有明确的“界限”，需要人为的约定进行分割。</p><p>在实际场景中，HTTP 中的Content-Length就起了类似的作用，当接收端收到的消息长度小于 Content-Length 时，说明还有些消息没收到。那接收端会一直等，直到拿到了足量的消息或超时。<br>另外，为了解决标志位在消息体中存在的情况。 发送端在发送时还会加入各种校验字段（校验和或者对整段完整数据进行 CRC 之后获得的数据）放在标志位后面，在接收端拿到整段数据后校验下确保它就是发送端发来的完整数据</p><p>引用：<br>[1]: 什么是TCP粘包？怎么解决这个问题- 苍青浪- 博客园 <a href="https://www.cnblogs.com/cangqinglang/p/11503057.html">https://www.cnblogs.com/cangqinglang/p/11503057.html</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;首先要确定一个问题，什么是&lt;strong&gt;粘包&lt;/strong&gt;？下面是某博客关于&lt;strong&gt;粘包&lt;/strong&gt;的描述：&lt;/p&gt;
+&lt;h4 id=&quot;“TCP粘包就是指发送方发送的若干包数据到达接收方时粘成了一包。”-1&quot;&gt;&lt;a href=&quot;#“TCP粘包就是指发送方发</summary>
+      
+    
+    
+    
+    <category term="网络" scheme="http://rmchz.github.io/categories/%E7%BD%91%E7%BB%9C/"/>
+    
+    
+    <category term="TCP" scheme="http://rmchz.github.io/tags/TCP/"/>
+    
+  </entry>
+  
+</feed>
